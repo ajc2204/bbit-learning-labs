@@ -21,12 +21,19 @@ class mqConsumer(mqConsumerInterface):
         channel = connection.channel()
         channel.exchange_declare('Tech Lab Exchange')
 
+        channel.queue_declare(queue=self.queue_name)
+        channel.queue_bind(queue= self.queue_name, routing_key= self.binding_key, exchange=self.exchange_name)
+        channel.basic_consume(self.queue_name, self.body.message)
+
     def onMessageCallback(self):
-        return
-        
+        channel.basic_ack(method_frame.delivery_tag, False)
+
     def startConsuming(self):
-        return 
-    
+        print(" [*] Waiting for messages. To exit press CTRL+C")
+        channel.start_consuming()
+
     def __del__(self):
-        return
+        channel.close()
+        print("Closing RMQ connection on destruction")
+        connection.close()
     
