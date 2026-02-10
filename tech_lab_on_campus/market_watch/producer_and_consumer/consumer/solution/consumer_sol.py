@@ -19,7 +19,7 @@ class mqConsumer(mqConsumerInterface):
         conParams = pika.URLParameters(os.environ['AMQP_URL'])
         connection = pika.BlockingConnection(parameters=conParams)
         channel = connection.channel()
-        channel.exchange_declare('Test Exchange')
+        channel.exchange_declare('Tech Lab Exchange')
 
     def onMessageCallback(self):
         return
