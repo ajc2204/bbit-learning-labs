@@ -17,8 +17,8 @@ class mqConsumer(mqConsumerInterface):
         #Build our connection to the RMQ Connection.
         #The AMPQ_URL is a string which tells pika the package the URL of our AMPQ service in this scenario RabbitMQ.
         conParams = pika.URLParameters(os.environ['AMQP_URL'])
-        connection = pika.BlockingConnection(parameters=conParams)
-        self.channel = connection.channel()
+        self.connection = pika.BlockingConnection(parameters=conParams)
+        self.channel = self.connection.channel()
         self.channel.exchange_declare('Tech Lab Exchange')
 
         self.channel.queue_declare(queue=self.queue_name)
