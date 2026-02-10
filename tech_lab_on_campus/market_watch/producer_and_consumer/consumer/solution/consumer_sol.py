@@ -23,9 +23,9 @@ class mqConsumer(mqConsumerInterface):
 
         self.channel.queue_declare(queue=self.queue_name)
         self.channel.queue_bind(queue= self.queue_name, routing_key= self.binding_key, exchange=self.exchange_name)
-        self.channel.basic_consume(self.queue_name, self.body.message)
+        self.channel.basic_consume(self.queue_name, self.onMessageCallback)
 
-    def onMessageCallback(self):
+    def onMessageCallback(self, channel, method_frame, header_frame, body):
         self.channel.basic_ack(method_frame.delivery_tag, False)
 
     def startConsuming(self):
