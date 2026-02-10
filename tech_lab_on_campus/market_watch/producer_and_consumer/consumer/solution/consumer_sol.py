@@ -18,22 +18,22 @@ class mqConsumer(mqConsumerInterface):
         #The AMPQ_URL is a string which tells pika the package the URL of our AMPQ service in this scenario RabbitMQ.
         conParams = pika.URLParameters(os.environ['AMQP_URL'])
         connection = pika.BlockingConnection(parameters=conParams)
-        channel = connection.channel()
-        channel.exchange_declare('Tech Lab Exchange')
+        self.channel = connection.channel()
+        self.channel.exchange_declare('Tech Lab Exchange')
 
-        channel.queue_declare(queue=self.queue_name)
-        channel.queue_bind(queue= self.queue_name, routing_key= self.binding_key, exchange=self.exchange_name)
-        channel.basic_consume(self.queue_name, self.body.message)
+        self.channel.queue_declare(queue=self.queue_name)
+        self.channel.queue_bind(queue= self.queue_name, routing_key= self.binding_key, exchange=self.exchange_name)
+        self.channel.basic_consume(self.queue_name, self.body.message)
 
     def onMessageCallback(self):
-        channel.basic_ack(method_frame.delivery_tag, False)
+        self.channel.basic_ack(method_frame.delivery_tag, False)
 
     def startConsuming(self):
         print(" [*] Waiting for messages. To exit press CTRL+C")
-        channel.start_consuming()
+        self.channel.start_consuming()
 
     def __del__(self):
-        channel.close()
+        self.channel.close()
         print("Closing RMQ connection on destruction")
-        connection.close()
+        self.connection.close()
     
