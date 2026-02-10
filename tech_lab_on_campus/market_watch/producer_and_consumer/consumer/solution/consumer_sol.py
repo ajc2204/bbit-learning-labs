@@ -26,7 +26,8 @@ class mqConsumer(mqConsumerInterface):
         self.channel.basic_consume(self.queue_name, self.onMessageCallback)
 
     def onMessageCallback(self, channel, method_frame, header_frame, body):
-        self.channel.basic_ack(f"data. methodframe:{method_frame}\nheaderframe:{header_frame}\nbody:{body}")
+        print(f"data. methodframe:{method_frame}\nheaderframe:{header_frame}\nbody:{body}")
+        self.channel.basic_ack(method_frame.delivery_tag)
 
     def startConsuming(self):
         print(" [*] Waiting for messages. To exit press CTRL+C")
