@@ -19,7 +19,6 @@ class mqProducer(producer_interface.mqProducerInterface):
 
     def publishOrder(self, message: str) -> None:
         # Basic Publish to Exchange
-        self.channel.queue_declare(queue='queue')
         self.channel.basic_publish(
             exchange=self.exchange_name,
             routing_key=self.routing_key,
